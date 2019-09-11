@@ -53,7 +53,8 @@ def find_duos(players_list):
 
         possible_courts = []
         shape = [len(possible_matches)] * (len(playing_this_round) // 4)
-        #print(shape)
+        # itertools.product is used to basically do a dot product of all possible matches
+        # to work out all possible court layouts
         for match_i in itertools.product(*[range(s) for s in shape]):
             if len(match_i) == 1:
                 # only one court so no need to do any checks
@@ -62,8 +63,7 @@ def find_duos(players_list):
                 # Make sure the matches make sense (people aren't playing multiple games at once)
                 temp_check_list = []
                 for ci in range(len(match_i)):
-                    #print(list(match_i), ci)
-                    #print(possible_courts)
+                    # Reformat the players so it's easier to check
                     pair_1, pair_2 = possible_matches[list(match_i)[ci]]
                     py1, py2 = pair_1
                     py3, py4 = pair_2
@@ -75,10 +75,6 @@ def find_duos(players_list):
                     for mi in match_i:
                         temp_courts.append(possible_matches[mi])
                     possible_courts.append(temp_courts)
-            #print(len(match_i))
-            #for match in possible_matches:
-
-        #print(possible_courts)
 
         # Score each possible match by counting how many times the players have
         # previous played against or played with their matches
@@ -106,9 +102,6 @@ def find_duos(players_list):
                     temp_score_against += 1
                 if py2 in players_dict[py4]["played_against"]:
                     temp_score_against += 1
-                #print("          Pair 1: {0}   {1}".format(py1, py2))
-                #print("          Pair 2: {0}   {1}".format(py3, py4))
-                #print("          score with {0}".format(temp_score_with))
 
             match_score_with.append(temp_score_with)
             match_score_against.append(temp_score_against)
@@ -116,6 +109,7 @@ def find_duos(players_list):
         # Print the first match with the lowest score
         min_score_with = min(match_score_with)
         temp = []
+        # Prioritise the matches with the smallest play with score
         for mi, msa in enumerate(match_score_against):
             if match_score_with[mi] == min_score_with:
                 temp.append(msa)
@@ -152,9 +146,6 @@ def find_duos(players_list):
                     players_dict[py4]["played_against"].append(py1)
                     players_dict[py4]["played_against"].append(py2)
 
-                    #print(players_dict)
-                    #if round_number == 3:
-                    #    exit()
                 round_number += 1
                 break
 
