@@ -2,22 +2,38 @@
 import argparse
 import itertools
 
+
+def player_to_remove(player_list):
+    n_to_remove = len(player_list)%4
+    while True:
+        to_remove = input("Please input {0} space seperated player names to"
+                          " remove :".format(n_to_remove)).split()
+        if not (all(x in player_list for x in to_remove)):
+            print("Your input names are not in the players list")
+        elif len(to_remove) != n_to_remove:
+            print("Incorrect number of names input")
+        else:
+            # remove to_remove from player_list
+            return [x for x in player_list if x not in to_remove]
+
+
 def find_duos(players_list):
     
     # Make a dictionay of each player which contains a dictionary of played with 
-    # and vsed each of which contains a list of players they've played with or 
-    # vsed respectively
+    # and played against each of which contains a list of players they've played
+    # with or played against respectively
     players_dict = {}
     for play in players_list:
         players_dict[play] = {"played_with" : [], "played_against" : []}
 
-    #TODO add thing that removes spare players
-    playing_this_round = players_list
-
-
+    
     new_matchs = True
     round_number = 1
     while new_matchs:
+        # Remove any spare players
+        if len(players_list)%4 != 0:
+            playing_this_round = player_to_remove(players_list)
+
         # Work out all possible pairs
         possible_pairs = []
         for p1i, player_1 in enumerate(playing_this_round[:-1]):
