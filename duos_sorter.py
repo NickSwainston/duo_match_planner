@@ -33,6 +33,8 @@ def find_duos(players_list):
         # Remove any spare players
         if len(players_list)%4 != 0:
             playing_this_round = player_to_remove(players_list)
+        else:
+            playing_this_round = players_list
 
         # Work out all possible pairs
         possible_pairs = []
